@@ -17,10 +17,13 @@ MY_NAME = os.environ.get("MY_NAME")
 MY_ID = os.environ.get("MY_ID")
 
 def send_telegram(text):
-    url = f"https://api.telegram.com/bot{TELEGRAM_TOKEN}/sendMessage"
+    url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
     payload = {"chat_id": TELEGRAM_CHAT_ID, "text": text}
     try:
-        requests.post(url, json=payload)
+        response = requests.post(url, json=payload)
+        # --- ДОБАВЬ ЭТИ ДВЕ СТРОКИ ---
+        print(f"DEBUG: Статус ответа от Telegram: {response.status_code}")
+        print(f"DEBUG: Текст ответа от Telegram: {response.text}")
     except Exception as e:
         print(f"Ошибка отправки в ТГ: {e}")
 
