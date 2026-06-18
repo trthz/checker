@@ -134,19 +134,20 @@ def run_bot():
         page_content = driver.page_source
         
         # Отправляем сообщение в любом случае, чтобы понять, что бот работает
-        # И добавляем информацию о слотах
+        # --- ФИНАЛЬНАЯ ЛОГИКА ---
+        # Проверяем, есть ли фразы об отсутствии слотов
         is_slots_available = not any(phrase in page_content for phrase in ["Brak dostępnych", "Brak dismantling", "Brak dostępnych", "Брак доступних", "Нет доступных", "No available"])
         
         if is_slots_available:
-            msg = "🚨 ВНИМАНИЕ! Слоты найдены!"
+            message = "🚨 ВНИМАНИЕ! В форме Pyszne появились свободные слоты для Радома! Бегом забирай!"
         else:
-            msg = "🤖 Бот проверил форму: слотов пока нет."
+            message = "🤖 Бот проверил форму: слотов пока нет."
             
-        print(msg)
-        send_telegram(msg)
-            print("🚨 СЛОТЫ НАЙДЕНЫ!")
-            send_telegram("🚨 Внимание! В форме Pyszne появились свободные slots для Радома! Бегом забирай!")
-            
+        print(message)
+        try:
+            send_telegram(message)
+        except Exception as e:
+            print(f"Ошибка отправки в ТГ: {e}")
     except Exception as e:
         print(f"Ошибка во время проверки: {e}")
     finally:
