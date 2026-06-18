@@ -132,6 +132,7 @@ def run_bot():
         
         if any(phrase in page_content for phrase in ["Brak доступных", "Brak dismantling", "Brak dostępnych", "Брак доступних", "Нет доступных", "No available"]):
             print("Проверил. Слотов нет.")
+            send_telegram("🤖 Тест: я жив, работаю в облаке и только что проверил форму — слотов пока нет!")
         else:
             print("🚨 СЛОТЫ НАЙДЕНЫ!")
             send_telegram("🚨 Внимание! В форме Pyszne появились свободные slots для Радома! Бегом забирай!")
