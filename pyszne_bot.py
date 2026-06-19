@@ -30,32 +30,32 @@ def send_telegram(text):
 def run_bot():
     chrome_options = Options()
     chrome_options.add_argument("--window-size=1920,1080")
-    chrome_options.add_argument("--headless=new") 
+    chrome_options.add_argument("--headless=new")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
-    
+
     driver = webdriver.Chrome(options=chrome_options)
     actions = ActionChains(driver)
-    
+
     NEXT_BUTTON_XPATH = "//div[@role='button' and (contains(., 'Далее') or contains(., 'Далі') or contains(., 'Dalej') or contains(., 'Next'))]"
-    
+
     try:
         print("Открываем форму...")
         driver.get(FORM_URL)
-        
+
         # --- ЭКРАН 1 ---
         email_input = WebDriverWait(driver, 15).until(
             EC.visibility_of_element_located((By.XPATH, "//input[@type='email']"))
         )
         email_input.send_keys(MY_EMAIL)
-        
+
         next_btn = WebDriverWait(driver, 15).until(
             EC.element_to_be_clickable((By.XPATH, NEXT_BUTTON_XPATH))
         )
         time.sleep(1)
         next_btn.click()
         time.sleep(2.5)
-        
+
         # --- ЭКРАН 2 ---
         text_inputs = WebDriverWait(driver, 15).until(
             EC.visibility_of_all_elements_located((By.XPATH, "//input[@type='text']"))
@@ -63,15 +63,15 @@ def run_bot():
         text_inputs[0].send_keys(MY_NAME)
         time.sleep(0.5)
         text_inputs[1].send_keys(MY_ID)
-        
+
         radio_label = WebDriverWait(driver, 15).until(
             EC.presence_of_element_located((By.XPATH, "//span[contains(text(), '2. Chcę') or contains(text(), '2. I want')]"))
         )
         radio_option = radio_label.find_element(By.XPATH, "./ancestor::div[contains(@role, 'radio') or @data-value]")
-        
+
         driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", radio_option)
         time.sleep(1)
-        
+
         for attempt in range(4):
             if radio_option.get_attribute("aria-checked") == "true":
                 break
@@ -82,7 +82,7 @@ def run_bot():
                 elif attempt == 3: radio_label.click()
             except: pass
             time.sleep(0.5)
-            
+
         time.sleep(1)
         next_btn = WebDriverWait(driver, 15).until(
             EC.element_to_be_clickable((By.XPATH, NEXT_BUTTON_XPATH))
@@ -90,7 +90,7 @@ def run_bot():
         try: next_btn.click()
         except: driver.execute_script("arguments[0].click();", next_btn)
         time.sleep(2.5)
-        
+
         # --- ЭКРАН 3 ---
         try:
             city_dropdown = WebDriverWait(driver, 4).until(
@@ -99,7 +99,7 @@ def run_bot():
             try: city_dropdown.click()
             except: driver.execute_script("arguments[0].click();", city_dropdown)
             time.sleep(1.5)
-            
+
             radom_option = WebDriverWait(driver, 4).until(
                 EC.element_to_be_clickable((By.XPATH, "//div[@role='option' and contains(., 'Radom')]"))
             )
@@ -113,7 +113,7 @@ def run_bot():
             time.sleep(0.5)
             try: radom_radio.click()
             except: driver.execute_script("arguments[0].click();", radom_radio)
-            
+
         time.sleep(1)
         next_btn = WebDriverWait(driver, 15).until(
             EC.element_to_be_clickable((By.XPATH, NEXT_BUTTON_XPATH))
@@ -121,7 +121,7 @@ def run_bot():
         try: next_btn.click()
         except: driver.execute_script("arguments[0].click();", next_btn)
         time.sleep(2.5)
-        
+
         # --- ЭКРАН 4 ---
         try:
             slots_dropdown = driver.find_element(By.XPATH, "//div[@role='listbox']")
@@ -130,36 +130,34 @@ def run_bot():
             time.sleep(2)
         except:
             pass
-            
+
         page_content = driver.page_source
-        
-        # Собираем весь текст со страницы для отладки
-        page_content = driver.page_source
-        
+
         # --- ФИНАЛЬНАЯ ЛОГИКА ---
-        try:
-            # Проверка наличия слотов
-            is_slots_available = not any(phrase in page_content for phrase in ["Brak dostępnych", "Brak dismantling", "Brak dostępnych", "Брак доступных", "Нет доступных", "No available"])
+        is_slots_available = not any(phrase in page_content for phrase in ["Brak dostępnych", "Brak dismantling", "Brak dostępnych", "Брак доступных", "Нет доступных", "No available"])
 
-            if is_slots_available:
-                message = "🎉 ВНИМАНИЕ! СЛОТЫ НАЙДЕНЫ! БЕГОМ НА САЙТ! 🎉"
-                print(message)
-                send_telegram(message)
+        if is_slots_available:
+            message = "🎉 ВНИМАНИЕ! СЛОТЫ НАЙДЕНЫ! БЕГОМ НА САЙТ! 🎉"
+            print(message)
+            send_telegram(message)
 
-                # Звонок
-                username = "@hzzry"
-                call_text = "Внимание! Найдены свободные слоты! Срочно зайди на сайт!"
-                call_text_formatted = call_text.replace(" ", "+")
-                call_url = f"http://api.callmebot.com/telegram/call.php?user={username}&text={call_text_formatted}&lang=ru-RU-Standard-C"
-                requests.get(call_url)
-                print("📞 Запрос на звонок успешно отправлен!")
-            else:
-                message = "🤖 Бот проверил форму: слотов пока нет."
-                print(message)
-                send_telegram(message)
+            # Звонок
+            username = "@hzzry"
+            call_text = "Внимание! Найдены свободные слоты! Срочно зайди на сайт!"
+            call_text_formatted = call_text.replace(" ", "+")
+            call_url = f"http://api.callmebot.com/telegram/call.php?user={username}&text={call_text_formatted}&lang=ru-RU-Standard-C"
+            requests.get(call_url)
+            print("📞 Запрос на звонок успешно отправлен!")
+        else:
+            message = "🤖 Бот проверил форму: слотов пока нет."
+            print(message)
+            send_telegram(message)
 
-        except Exception as e:
-            print(f"Произошла ошибка при выполнении: {e}")
+    except Exception as e:
+        print(f"Произошла ошибка при выполнении: {e}")
 
-        finally:
-            driver.quit()
+    finally:
+        driver.quit()
+
+if __name__ == "__main__":
+    run_bot()
