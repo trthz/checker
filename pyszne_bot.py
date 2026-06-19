@@ -145,7 +145,7 @@ def run_bot():
             username = "@hzzry"
             call_text = "Внимание! Найдены свободные слоты! Срочно зайди на сайт!"
             call_text_formatted = call_text.replace(" ", "+")
-            call_url = f"http://api.callmebot.com/telegram/call.php?user={username}&text={call_text_formatted}&lang=ru-RU-Standard-C"
+            call_url = f"http://api.callmebot.com/telegram/start.php?user={username}&text={call_text_formatted}&lang=ru-RU-Standard-C"
             requests.get(call_url)
             print("📞 Запрос на звонок успешно отправлен!")
         else:
