@@ -138,12 +138,13 @@ def run_bot():
         
 # --- ФИНАЛЬНАЯ ЛОГИКА ---
 # --- НАЧАЛО ФИНАЛЬНОЙ ЛОГИКИ ---
+# --- НАЧАЛО ФИНАЛЬНОЙ ЛОГИКИ ---
     try:
-        # 1. Проверка наличия слотов
+        # Проверка наличия слотов
         is_slots_available = not any(phrase in page_content for phrase in ["Brak dostępnych", "Brak dismantling", "Brak dostępnych", "Брак доступных", "Нет доступных", "No available"])
         
         if is_slots_available:
-            message = "🚨 ВНИМАНИЕ! СЛОТЫ НАЙДЕНЫ! 🚨"
+            message = "🚨 ВНИМАНИЕ! СЛОТЫ НАЙДЕНЫ! БЕГОМ НА САЙТ! 🚨"
             print(message)
             send_telegram(message)
             
