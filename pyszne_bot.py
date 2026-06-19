@@ -137,25 +137,24 @@ def run_bot():
         page_content = driver.page_source
         
         # Отправляем сообщение в любом случае, чтобы понять, что бот работает
-        # --- ФИНАЛЬНАЯ ЛОГИКА ---
+        # --- НАЧАЛО ФИНАЛЬНОЙ ЛОГИКИ ---
     try:
-        # Проверяем наличие слотов
+        # 1. Проверка наличия слотов
         is_slots_available = not any(phrase in page_content for phrase in ["Brak dostępnych", "Brak dismantling", "Brak dostępnych", "Брак доступnych", "Нет доступных", "No available"])
         
         if is_slots_available:
             message = "🚨 ВНИМАНИЕ! СЛОТЫ НАЙДЕНЫ! БЕГОМ НА САЙТ! 🚨"
             print(message)
-            # Отправляем сообщение
             send_telegram(message)
             
             # Звонок
-            username = "@hzzry" 
+            username = "@hzzry"
             call_text = "Внимание! Найдены свободные слоты! Срочно зайди на сайт!"
             call_text_formatted = call_text.replace(" ", "+")
             call_url = f"http://api.callmebot.com/telegram/call.php?user={username}&text={call_text_formatted}&lang=ru-RU-Standard-C"
             requests.get(call_url)
             print("📞 Запрос на звонок успешно отправлен!")
-        
+            
         else:
             message = "🤖 Бот проверил форму: слотов пока нет."
             print(message)
@@ -163,6 +162,6 @@ def run_bot():
 
     except Exception as e:
         print(f"Произошла ошибка при выполнении: {e}")
-    
+        
     finally:
         driver.quit()
