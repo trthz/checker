@@ -136,11 +136,10 @@ def run_bot():
         # Собираем весь текст со страницы для отладки
         page_content = driver.page_source
         
-        # Отправляем сообщение в любом случае, чтобы понять, что бот работает
-        # --- НАЧАЛО ФИНАЛЬНОЙ ЛОГИКИ ---
+# --- ФИНАЛЬНАЯ ЛОГИКА ---
     try:
-        # 1. Проверка наличия слотов
-        is_slots_available = not any(phrase in page_content for phrase in ["Brak dostępnych", "Brak dismantling", "Brak dostępnych", "Брак доступnych", "Нет доступных", "No available"])
+        # Проверка слотов
+        is_slots_available = not any(phrase in page_content for phrase in ["Brak dostępnych", "Brak dismantling", "Brak dostępnych", "Брак доступных", "Нет доступных", "No available"])
         
         if is_slots_available:
             message = "🚨 ВНИМАНИЕ! СЛОТЫ НАЙДЕНЫ! БЕГОМ НА САЙТ! 🚨"
