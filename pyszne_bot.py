@@ -156,7 +156,7 @@ def run_bot():
             username = "@hzzry"  # <--- ВПИШИ СЮДА СВОЙ ЮЗЕРНЕЙМ В ТЕЛЕГРАМЕ (с @)
             call_text = "Внимание! Найдены свободные слоты на Пышне! Срочно зайди на сайт!"
             call_text_formatted = call_text.replace(" ", "+")
-            call_url = f"http://api.callmebot.com/telegram/call.php?user={username}&text={call_text_formatted}&lang=ru-RU-Standard-C"
+            call_url = f"http://api.callmebot.com/start.php?user={username}&text={call_text_formatted}&lang=ru-RU-Standard-C"
             
             requests.get(call_url)
             print("📞 Запрос на звонок успешно отправлен!")
