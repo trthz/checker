@@ -137,8 +137,6 @@ def run_bot():
         page_content = driver.page_source
         
 # --- ФИНАЛЬНАЯ ЛОГИКА ---
-# --- НАЧАЛО ФИНАЛЬНОЙ ЛОГИКИ ---
-# --- НАЧАЛО ФИНАЛЬНОЙ ЛОГИКИ ---
     try:
         # Проверка наличия слотов
         is_slots_available = not any(phrase in page_content for phrase in ["Brak dostępnych", "Brak dismantling", "Brak dostępnych", "Брак доступных", "Нет доступных", "No available"])
